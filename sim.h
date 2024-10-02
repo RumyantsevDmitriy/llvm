@@ -10,11 +10,11 @@
 #ifndef __sim__
 void simFlush();
 void simPutPixel(int x, int y, int argb);
-void gridInit();
-void gridUpdate();
-void gridDraw();
+void gridInit(int *grid, int width, int height);
+void gridUpdate(int *grid, int *next_grid, int width, int height);
+void gridDraw(int *grid, int width, int height);
 int simRand();
-int countNeighbors(int x, int y);
+int countNeighbors(int *grid, int x, int y, int width, int height);
 #endif
 
 extern void simInit();

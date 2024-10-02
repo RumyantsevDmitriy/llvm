@@ -1,69 +1,65 @@
 #include "sim.h"
 
-// Определяем игровое поле
-static int grid[GRID_WIDTH][GRID_HEIGHT];
-static int next_grid[GRID_WIDTH][GRID_HEIGHT];
-
 // Функция для начальной инициализации игрового поля
-void gridInit()
+void gridInit(int *grid, int width, int height)
 {
-  for (int x = 0; x < GRID_WIDTH; x++)
+  for (int x = 0; x < width; x++)
   {
-    for (int y = 0; y < GRID_HEIGHT; y++)
+    for (int y = 0; y < height; y++)
     {
       // Заполняем клетки случайным образом (0 или 1)
-      grid[x][y] = simRand() % 2;
+      grid[y * width + x] = simRand() % 2;
     }
   }
 }
 
 // Функция для обновления состояния игрового поля
-void gridUpdate()
+void gridUpdate(int *grid, int *next_grid, int width, int height)
 {
-  for (int x = 0; x < GRID_WIDTH; x++)
+  for (int x = 0; x < width; x++)
   {
-    for (int y = 0; y < GRID_HEIGHT; y++)
+    for (int y = 0; y < height; y++)
     {
-      int neighbors = countNeighbors(x, y);
+      int neighbors = countNeighbors(grid, x, y, width, height);
 
       // Применяем правила "Игры жизни"
-      if (grid[x][y] == 1)
+      if (grid[y * width + x] == 1)
       {
-        // Живая клетка остается живой, если у нее 2 или 3 соседа
-        next_grid[x][y] = (neighbors == 2 || neighbors == 3) ? 1 : 0;
+          // Живая клетка остается живой, если у нее 2 или 3 соседа
+          next_grid[y * width + x] = (neighbors == 2 || neighbors == 3) ? 1 : 0;
       } else {
-        // Мертвая клетка становится живой, если у нее ровно 3 соседа
-        next_grid[x][y] = (neighbors == 3) ? 1 : 0;
+          // Мертвая клетка становится живой, если у нее ровно 3 соседа
+          next_grid[y * width + x] = (neighbors == 3) ? 1 : 0;
       }
     }
   }
 
   // Копируем новое состояние в текущее
-  for (int x = 0; x < GRID_WIDTH; x++)
+  for (int x = 0; x < width; x++)
   {
-    for (int y = 0; y < GRID_HEIGHT; y++)
+    for (int y = 0; y < height; y++)
     {
-      grid[x][y] = next_grid[x][y];
+      grid[y * width + x] = next_grid[y * width + x];
     }
   }
 }
 
 // Функция для отрисовки текущего состояния игрового поля
-void gridDraw()
+void gridDraw(int *grid, int width, int height)
 {
-  for (int x = 0; x < GRID_WIDTH; x++)
+  for (int x = 0; x < width; x++)
   {
-    for (int y = 0; y < GRID_HEIGHT; y++)
+    for (int y = 0; y < height; y++)
     {
       // Если клетка жива — рисуем белым, если мертва — черным
-      int color = grid[x][y] ? 0xFFFFFFFF : 0x00000000;
+      int color = grid[y * width + x] ? 0xFFFFFFFF : 0x00000000;
 
       // Рисуем клетку (CELL_SIZE на CELL_SIZE пикселей)
       for (int dx = 0; dx < CELL_SIZE; dx++)
       {
         for (int dy = 0; dy < CELL_SIZE; dy++)
         {
-            simPutPixel(x * CELL_SIZE + dx, y * CELL_SIZE + dy, color);
+          simPutPixel(x * CELL_SIZE + dx, y * CELL_SIZE + dy, color);
         }
       }
     }
@@ -71,7 +67,7 @@ void gridDraw()
 }
 
 // Функция для подсчета количества живых соседей клетки (x, y)
-int countNeighbors(int x, int y)
+int countNeighbors(int *grid, int x, int y, int width, int height)
 {
   int count = 0;
 
@@ -89,9 +85,9 @@ int countNeighbors(int x, int y)
       int ny = y + dy;
 
       // Проверяем границы поля
-      if (nx >= 0 && nx < GRID_WIDTH && ny >= 0 && ny < GRID_HEIGHT)
+      if (nx >= 0 && nx < width && ny >= 0 && ny < height)
       {
-        count += grid[nx][ny];
+        count += grid[ny * width + nx];
       }
     }
   }
@@ -102,12 +98,16 @@ int countNeighbors(int x, int y)
 // Функция входа в симуляцию
 void app()
 {
-  gridInit();
+  // Создаем одномерные массивы для текущего и следующего состояния игрового поля
+  int grid[GRID_WIDTH * GRID_HEIGHT];
+  int next_grid[GRID_WIDTH * GRID_HEIGHT];
+
+  gridInit(grid, GRID_WIDTH, GRID_HEIGHT);
 
   while (1)
   {
-    gridUpdate();
-    gridDraw();
+    gridUpdate(grid, next_grid, GRID_WIDTH, GRID_HEIGHT);
+    gridDraw(grid, GRID_WIDTH, GRID_HEIGHT);
     simFlush();
   }
 }
