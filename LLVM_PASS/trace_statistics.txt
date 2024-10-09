@@ -1,0 +1,31 @@
+Количество комбинаций: 30
+906452 : add <- add | add <- add | add <- add | add <- add | add <- add
+880733 : icmp <- icmp
+555869 : add <- add
+548284 : add <- add | add <- add
+471755 : mul <- mul
+467675 : load <- load
+388792 : trunc <- trunc
+338076 : getelementptr <- getelementptr | getelementptr <- getelementptr
+259198 : sext <- sext | sext <- sext | sext <- sext | sext <- sext | sext <- sext
+246599 : add <- add | add <- add | add <- add
+221599 : getelementptr <- getelementptr
+214920 : and <- and | and <- and
+172260 : and <- and
+172260 : select <- select
+171720 : icmp <- icmp | icmp <- icmp
+86398 : mul <- mul | mul <- mul | mul <- mul | mul <- mul | mul <- mul
+85860 : icmp <- icmp | icmp <- icmp | icmp <- icmp | icmp <- icmp
+43919 : trunc <- trunc | trunc <- trunc
+43740 : icmp <- icmp | icmp <- icmp | icmp <- icmp | icmp <- icmp | icmp <- icmp
+43200 : call <- call | call <- call
+43200 : sext <- sext | sext <- sext | sext <- sext | sext <- sext
+43200 : zext <- zext
+43199 : or <- or
+4800 : call <- call
+4800 : srem <- srem
+720 : add <- add | add <- add | add <- add | add <- add
+720 : mul <- mul | mul <- mul
+9 : icmp <- icmp | icmp <- icmp | icmp <- icmp
+9 : zext <- zext | zext <- zext | zext <- zext
+3 : alloca <- alloca | alloca <- alloca | alloca <- alloca | alloca <- alloca | alloca <- alloca
